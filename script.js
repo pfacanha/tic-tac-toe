@@ -1,22 +1,21 @@
 // create a Gameboard object as an IIFE
-const Game = (function () {
+const Game = (function (maxRounds) {
   let gameboard = [];
   let players = [];
-  let count = 0;
+  let rounds = 0;
+
+  const displayPlayers = () => {
+    if (players.length == 0) {
+      console.log("No players in the game yet");
+    } else {
+      console.log(players);
+    }
+  };
 
   function init() {
     console.log("You just started the game!");
-    console.log(`${count} rounds were played so far!`);
-    function displayGame() {
-      if (players.length == 0) {
-        console.log("No players in the game yet");
-      } else {
-        for (let i = 0; i < players.length; ++i) {
-          console.log(`Player ${i + 1} is ${players[i]}`);
-        }
-      }
-    }
-    displayGame();
+    console.log(`${rounds} were played so far!`);
+    displayPlayers();
   }
 
   function createUser(name) {
@@ -24,16 +23,16 @@ const Game = (function () {
     return name;
   }
 
-  const playRound = () => count++;
+  const play = () => {
+    if (rounds < maxRounds) rounds++;
+  };
 
   return {
     init,
     createUser,
-    playRound,
+    play,
   };
-})();
+})(5);
 
-Game.init();
 const player1 = Game.createUser("Pedro");
-console.log(`${player1} is the player`);
-console.log(Game.count);
+Game.init();
