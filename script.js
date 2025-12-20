@@ -8,7 +8,8 @@ const Game = (function () {
   }
 
   function createUser(name) {
-    players.push(name);
+    const username = name;
+    players.push(username);
     return name;
   }
 
