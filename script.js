@@ -5,18 +5,21 @@ const Game = (function () {
 
   function init() {
     console.log("You just started the game!");
+    return function displayGame() {
+      if (players.length == 0) {
+        console.log("No players in the game yet");
+      } else {
+        for (let i = 0; i < players.length; ++i) {
+          console.log(`Player ${i + 1} is ${players[i]}`);
+        }
+      }
+    };
   }
 
   function createUser(name) {
     const username = name;
     players.push(username);
     return name;
-  }
-
-  function displayPlayers() {
-    for (let i = 0; i < players.length; ++i) {
-      console.log(`Player ${i + 1} is ${players[i]}`);
-    }
   }
 
   return {
@@ -28,5 +31,3 @@ const Game = (function () {
 
 Game.init();
 const player1 = Game.createUser("Pedro");
-console.log(player1);
-Game.displayPlayers();
