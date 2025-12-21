@@ -14,7 +14,7 @@ const Game = (function (maxRounds) {
 
   function init() {
     console.log("You just started the game!");
-    console.log(`${rounds} were played so far!`);
+    console.log(`${rounds} rounds were played so far!`);
     displayPlayers();
   }
 
@@ -25,6 +25,7 @@ const Game = (function (maxRounds) {
 
   const play = () => {
     if (rounds < maxRounds) rounds++;
+    console.log(`Round ${rounds} was played!`);
   };
 
   return {
@@ -36,3 +37,4 @@ const Game = (function (maxRounds) {
 
 const player1 = Game.createUser("Pedro");
 Game.init();
+player1.play();
