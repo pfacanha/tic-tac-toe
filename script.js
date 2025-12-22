@@ -3,7 +3,7 @@ const Game = (function (maxRounds) {
   let gameboard = [];
   let players = [];
   let rounds = 0;
-  
+
   function init() {
     console.log("You just started the game!");
     console.log(`${rounds} rounds were played so far!`);
@@ -14,13 +14,13 @@ const Game = (function (maxRounds) {
     return {
       name,
       score: 0,
-      scoreUp() {
+      scoreUp: function () {
         ++this.score;
-      }
-    }
-  }
-  
-  function addPlayer(name){
+      },
+    };
+  };
+
+  function addPlayer(name) {
     const player = createPlayer(name);
     players.push(player);
     return player;
