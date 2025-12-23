@@ -1,7 +1,12 @@
 // start project "Tic-Tac-Toe" from scratch
 const gameBoard = (function () {
-  let rows = 3;
-  let columns = 3;
+  const board = [];
+
+  const getBoard = () => board;
+
+  return {
+    getBoard,
+  };
 })();
 
 const gameController = (function () {
@@ -12,4 +17,13 @@ const gameController = (function () {
       score: 0,
     },
   ];
+
+  const displayPlayers = () =>
+    players.forEach((player) => console.log(player.name));
+
+  return {
+    displayPlayers,
+  };
 })();
+
+gameController.displayPlayers();
