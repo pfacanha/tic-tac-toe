@@ -1,5 +1,5 @@
 // start project "Tic-Tac-Toe" from scratch
-function GameBoard() {
+function Gameboard() {
   let rows = 3;
   let columns = 3;
   const board = [];
@@ -40,20 +40,49 @@ function Cell() {
 }
 
 const gameController = (function () {
+  const x = "X";
+  const o = "O";
+
   const players = [
-    { name: "Player One", score: 0 },
+    {
+      name: "Player One",
+      token: 1,
+      score: 0,
+    },
     {
       name: "Player Two",
+      token: 2,
       score: 0,
     },
   ];
 
-  const displayPlayers = () =>
-    players.forEach((player) => console.log(player.name));
+  const board = Gameboard();
+
+  let activePlayer = players[0];
+
+  const switchPlayerTurn = () => {
+    activePlayer = activePlayer === players[0] ? players[1] : players[0];
+  };
+  const getActivePlayer = () => activePlayer;
+
+  const printRound = () => {
+    console.log(`This is ${getActivePlayer().name}'s turn.`);
+  };
+
+  const playRound = (row, column) => {
+    console.log(
+      `${getActivePlayer().name} 
+      is going to mark into row ${row} and column ${column}`
+    );
+    board.placeMark(row, column, x);
+  };
 
   return {
-    displayPlayers,
+    printRound,
+    switchPlayerTurn,
+    getActivePlayer,
+    playRound,
   };
 })();
 
-gameController.displayPlayers();
+gameController.printRound();
