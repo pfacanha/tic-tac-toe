@@ -1,5 +1,5 @@
 // start project "Tic-Tac-Toe" from scratch
-const gameBoard = (function () {
+function GameBoard() {
   let rows = 3;
   let columns = 3;
   const board = [];
@@ -15,25 +15,27 @@ const gameBoard = (function () {
 
   const getBoard = () => board;
 
-  const placeMark = (row, column, mark) => {};
+  const placeMark = (row, column, mark) => {
+    board[row][column].addMark(mark);
+  };
 
   return {
     printBoard,
     getBoard,
     placeMark,
   };
-})();
+}
 
 function Cell() {
   let value = "";
 
-  const assignValue = (mark) => (value = mark);
+  const addMark = (mark) => (value = mark);
 
   const getValue = () => value;
 
   return {
+    addMark,
     getValue,
-    assignValue,
   };
 }
 
@@ -55,5 +57,3 @@ const gameController = (function () {
 })();
 
 gameController.displayPlayers();
-gameBoard.printBoard();
-gameBoard.placeMark(2, 3, "X");
