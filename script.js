@@ -15,8 +15,10 @@ function Gameboard() {
 
   const getBoard = () => board;
 
-  const placeMark = (row, column, mark) => {
-    board[row][column].setMark(mark);
+  const placeMark = (row, column, token) => {
+    const cell = board[row][column];
+    cell.setMark(token);
+    return cell;
   };
 
   return {
@@ -29,7 +31,7 @@ function Gameboard() {
 function Cell() {
   let value = "";
 
-  const setMark = (mark) => (value = mark);
+  const setMark = (token) => (value = token);
 
   const getValue = () => value;
 
@@ -68,10 +70,14 @@ const gameController = (function () {
 
   const playRound = (row, column) => {
     console.log(
-      `${getActivePlayer().name} 
-      is going to mark into row ${row} and column ${column}`
+      `${
+        getActivePlayer().name
+      } is going to mark into row ${row} and column ${column}`
     );
-    board.placeMark(row, column, activePlayer.token);
+    const cell = board.placeMark(row, column, activePlayer.token);
+    console.log(
+      `Row ${row} and Column ${column} was marked with ${cell.getValue()}`
+    );
   };
 
   return {
@@ -83,5 +89,7 @@ const gameController = (function () {
 })();
 
 gameController.printRound();
-gameController.playRound();
+gameController.playRound(0, 0);
 gameController.switchPlayerTurn();
+const gameboard = Gameboard();
+console.table(gameboard.getBoard());
