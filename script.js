@@ -69,12 +69,13 @@ const gameController = (function () {
   };
 
   const playRound = (row, column) => {
+    const cell = board.placeMark(row, column, activePlayer.token);
+
     console.log(
       `${
         getActivePlayer().name
       } is going to mark into row ${row} and column ${column}`
     );
-    const cell = board.placeMark(row, column, activePlayer.token);
     console.log(
       `Row ${row} and Column ${column} was marked with ${cell.getValue()}`
     );
