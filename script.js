@@ -14,13 +14,12 @@ function Gameboard() {
   const printBoard = () => console.log(board);
 
   const getBoard = () => {
-    return board.forEach((row) => row.map((cell) => cell.getValue()));
+    return board.map((row) => row.map((cell) => cell.getValue()));
   };
 
   const placeMark = (row, column, token) => {
     const cell = board[row][column];
     cell.setMark(token);
-    return cell;
   };
 
   return {
