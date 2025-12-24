@@ -96,3 +96,4 @@ const gameController = (function () {
 gameController.printRound();
 gameController.playRound(0, 0);
 gameController.switchPlayerTurn();
+gameController.playRound(0, 0);
