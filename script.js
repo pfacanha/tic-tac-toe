@@ -92,8 +92,11 @@ const gameController = (function () {
     playRound,
   };
 })();
+
 gameController.printRound();
 gameController.playRound(0, 0);
 gameController.switchPlayerTurn();
 gameController.printRound();
 gameController.playRound(0, 0);
+gameController.printRound();
+gameController.playRound(1, 1);
