@@ -67,6 +67,7 @@ const gameController = (function () {
   const switchPlayerTurn = () => {
     activePlayer = activePlayer === players[0] ? players[1] : players[0];
   };
+
   const getActivePlayer = () => activePlayer;
 
   const printRound = () => {
@@ -74,20 +75,14 @@ const gameController = (function () {
   };
 
   const playRound = (row, column) => {
-    if (isAvailable(row, column)) {
+    if (board.isAvailable(row, column)) {
       board.placeMark(row, column, activePlayer.token);
+      console.log(
+        `Row ${row} and Column ${column} was marked with ${activePlayer.token}`
+      );
     } else {
-      console.log("No space available!");
+      console.log(`${activePlayer.name} tried to mark at space not available!`);
     }
-
-    console.log(
-      `${
-        getActivePlayer().name
-      } is going to mark into row ${row} and column ${column}`
-    );
-    console.log(
-      `Row ${row} and Column ${column} was marked with ${activePlayer.token}`
-    );
   };
 
   return {
@@ -100,3 +95,5 @@ const gameController = (function () {
 gameController.printRound();
 gameController.playRound(0, 0);
 gameController.switchPlayerTurn();
+gameController.printRound();
+gameController.playRound(0, 0);
