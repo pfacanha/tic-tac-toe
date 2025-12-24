@@ -19,7 +19,11 @@ function Gameboard() {
 
   const placeMark = (row, column, token) => {
     const cell = board[row][column];
-    cell.setMark(token);
+    if (cell.getValue() === "") {
+      cell.setMark(token);
+    } else {
+      console.log("Space not available");
+    }
   };
 
   return {
@@ -70,7 +74,7 @@ const gameController = (function () {
   };
 
   const playRound = (row, column) => {
-    const cell = board.placeMark(row, column, activePlayer.token);
+    board.placeMark(row, column, activePlayer.token);
 
     console.log(
       `${
@@ -78,9 +82,8 @@ const gameController = (function () {
       } is going to mark into row ${row} and column ${column}`
     );
     console.log(
-      `Row ${row} and Column ${column} was marked with ${cell.getValue()}`
+      `Row ${row} and Column ${column} was marked with ${activePlayer.token}`
     );
-    console.table(board.getBoard());
   };
 
   return {
@@ -90,7 +93,6 @@ const gameController = (function () {
     playRound,
   };
 })();
-
 gameController.printRound();
 gameController.playRound(0, 0);
 gameController.switchPlayerTurn();
