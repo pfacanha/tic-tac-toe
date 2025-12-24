@@ -18,18 +18,18 @@ function Gameboard() {
   };
 
   const placeMark = (row, column, token) => {
-    const cell = board[row][column];
-    if (cell.getValue() === "") {
-      cell.setMark(token);
-    } else {
-      console.log("Space not available");
-    }
+    board[row][column].setMark(token);
+  };
+
+  const isAvailable = (row, column) => {
+    return board[row][column].getValue() === "";
   };
 
   return {
     printBoard,
     getBoard,
     placeMark,
+    isAvailable,
   };
 }
 
@@ -74,7 +74,11 @@ const gameController = (function () {
   };
 
   const playRound = (row, column) => {
-    board.placeMark(row, column, activePlayer.token);
+    if (isAvailable(row, column)) {
+      board.placeMark(row, column, activePlayer.token);
+    } else {
+      console.log("No space available!");
+    }
 
     console.log(
       `${
@@ -96,4 +100,3 @@ const gameController = (function () {
 gameController.printRound();
 gameController.playRound(0, 0);
 gameController.switchPlayerTurn();
-gameController.playRound(0, 0);
