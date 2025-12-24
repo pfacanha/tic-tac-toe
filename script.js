@@ -13,7 +13,9 @@ function Gameboard() {
 
   const printBoard = () => console.log(board);
 
-  const getBoard = () => board;
+  const getBoard = () => {
+    return board.forEach((row) => row.map((cell) => cell.getValue()));
+  };
 
   const placeMark = (row, column, token) => {
     const cell = board[row][column];
@@ -79,6 +81,7 @@ const gameController = (function () {
     console.log(
       `Row ${row} and Column ${column} was marked with ${cell.getValue()}`
     );
+    console.table(board.getBoard());
   };
 
   return {
@@ -92,5 +95,3 @@ const gameController = (function () {
 gameController.printRound();
 gameController.playRound(0, 0);
 gameController.switchPlayerTurn();
-const gameboard = Gameboard();
-console.table(gameboard.getBoard());
