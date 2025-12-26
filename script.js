@@ -82,18 +82,24 @@ const gameController = (function (maxRounds) {
 
   const playRound = (row, column) => {
     if (board.isAvailable(row, column)) {
-      board.placeMark(row, column, activePlayer.token);
+      board.placeMark(row, column, getActivePlayer().token);
       console.log(
-        `Row ${row} and Column ${column} was marked with ${activePlayer.token}`
+        `Row ${row} and Column ${column} was marked with ${
+          getActivePlayer().token
+        }`
       );
-      activePlayer.attempts++;
+
+      getActivePlayer().attempts++;
+
       console.log(
-        `${activePlayer.name} has ${
-          maxRounds - activePlayer.attempts
+        `${getActivePlayer().name} has ${
+          maxRounds - getActivePlayer().attempts
         } attempts left`
       );
     } else {
-      console.log(`${activePlayer.name} tried to mark at space not available!`);
+      console.log(
+        `${getActivePlayer().name} tried to mark at space not available!`
+      );
     }
   };
 
