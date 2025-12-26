@@ -73,6 +73,9 @@ const gameController = (function (maxRounds) {
   const getActivePlayer = () => activePlayer;
 
   const printRound = () => {
+    if (activePlayer.attempts > 1) {
+      console.log(`Now it's another round for ${activePlayer.name}`);
+    }
     console.log(`This is ${getActivePlayer().name}'s turn.`);
   };
 
@@ -82,15 +85,15 @@ const gameController = (function (maxRounds) {
       console.log(
         `Row ${row} and Column ${column} was marked with ${activePlayer.token}`
       );
+      activePlayer.attempts++;
+      console.log(
+        `Now ${activePlayer.name} has ${
+          maxRounds - activePlayer.attempts
+        } attempts left`
+      );
     } else {
       console.log(`${activePlayer.name} tried to mark at space not available!`);
     }
-
-    activePlayer.attempts++;
-  };
-
-  const attempts = () => {
-    return activePlayer.attempts;
   };
 
   return {
@@ -108,4 +111,3 @@ gameController.printRound();
 gameController.playRound(0, 0);
 gameController.printRound();
 gameController.playRound(1, 1);
-gameController.attempts();
