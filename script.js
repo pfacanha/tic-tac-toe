@@ -46,16 +46,18 @@ function Cell() {
   };
 }
 
-const gameController = (function () {
+const gameController = (function (maxRounds) {
   const players = [
     {
       name: "Player One",
       token: "X",
+      attempts: 0,
       score: 0,
     },
     {
       name: "Player Two",
       token: "O",
+      attempts: 0,
       score: 0,
     },
   ];
@@ -83,6 +85,12 @@ const gameController = (function () {
     } else {
       console.log(`${activePlayer.name} tried to mark at space not available!`);
     }
+
+    activePlayer.attempts++;
+  };
+
+  const attempts = () => {
+    return activePlayer.attempts;
   };
 
   return {
@@ -91,7 +99,7 @@ const gameController = (function () {
     getActivePlayer,
     playRound,
   };
-})();
+})(5);
 
 gameController.printRound();
 gameController.playRound(0, 0);
@@ -100,3 +108,4 @@ gameController.printRound();
 gameController.playRound(0, 0);
 gameController.printRound();
 gameController.playRound(1, 1);
+gameController.attempts();
