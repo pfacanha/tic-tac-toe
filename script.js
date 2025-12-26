@@ -73,10 +73,11 @@ const gameController = (function (maxRounds) {
   const getActivePlayer = () => activePlayer;
 
   const printRound = () => {
-    if (activePlayer.attempts > 1) {
-      console.log(`Now it's another round for ${activePlayer.name}`);
+    if (getActivePlayer().attempts == 0) {
+      console.log(`This is ${getActivePlayer().name}'s turn.`);
+    } else {
+      console.log(`Now it's another round for ${getActivePlayer().name}`);
     }
-    console.log(`This is ${getActivePlayer().name}'s turn.`);
   };
 
   const playRound = (row, column) => {
@@ -87,7 +88,7 @@ const gameController = (function (maxRounds) {
       );
       activePlayer.attempts++;
       console.log(
-        `Now ${activePlayer.name} has ${
+        `${activePlayer.name} has ${
           maxRounds - activePlayer.attempts
         } attempts left`
       );
@@ -111,3 +112,6 @@ gameController.printRound();
 gameController.playRound(0, 0);
 gameController.printRound();
 gameController.playRound(1, 1);
+gameController.switchPlayerTurn();
+gameController.printRound();
+gameController.playRound(1, 2);
