@@ -102,6 +102,9 @@ function GameController(maxRounds) {
     }
   };
 
+  // TODO: create function that defines who is the winner, loser or draw
+  const isOver = () => {};
+
   printRound();
 
   return {
@@ -122,9 +125,8 @@ const screenController = (function () {
     boardDiv.textContent = "";
 
     const board = game.getBoard();
-    const activePlayer = game.getActivePlayer();
-
-    playerTurnDiv.textContent = `${activePlayer.name} turn..`;
+    let activePlayer = game.getActivePlayer();
+    playerTurnDiv.textContent = `${activePlayer.name}'s turn..`;
 
     board.forEach((row, rowIndex) => {
       row.forEach((cell, colIndex) => {
@@ -138,22 +140,23 @@ const screenController = (function () {
         boardDiv.appendChild(cellButton);
       });
     });
-
-    function clickHandlerBoard(e) {
-      const activePlayer = game.getActivePlayer();
-      const cell = e.target;
-      const row = cell.dataset.row;
-      const column = cell.dataset.column;
-
-      if (cell.textContent === "") {
-        game.playRound(row, column);
-        e.target.textContent = activePlayer.token;
-      } else {
-        console.log("Space not available!");
-      }
-    }
-
-    boardDiv.addEventListener("click", clickHandlerBoard);
   };
+  function clickHandlerBoard(e) {
+    const cell = e.target;
+    const row = cell.dataset.row;
+    const column = cell.dataset.column;
+
+    if (cell.textContent !== "") return;
+
+    const token = game.getActivePlayer().token;
+    game.playRound(row, column);
+
+    const playerName = game.getActivePlayer().name;
+    cell.textContent = token;
+    playerTurnDiv.textContent = `${playerName}'s turn..`;
+  }
+
+  boardDiv.addEventListener("click", clickHandlerBoard);
+
   updateScreen();
 })();
