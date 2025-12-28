@@ -46,7 +46,7 @@ function Cell() {
   };
 }
 
-const gameController = (function (maxRounds) {
+function GameController(maxRounds) {
   const players = [
     {
       name: "Player One",
@@ -115,7 +115,19 @@ const gameController = (function (maxRounds) {
     getActivePlayer,
     getBoard: board.getBoard,
   };
-})(5);
+}
 
-gameController.playRound(1, 1);
-gameController.playRound(2, 1);
+function ScreenController() {
+  const game = GameController(5);
+  const playerTurnDiv = document.querySelector(".turn");
+  const boardDiv = document.querySelector(".board");
+
+  const updateScreen = () => {
+    boardDiv.textContent = "";
+
+    const board = game.getBoard();
+    const activePlayer = game.getActivePlayer();
+
+    playerTurnDiv.textContent = `${activePlayer.name} turn..`;
+  };
+}
