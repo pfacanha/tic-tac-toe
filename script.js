@@ -137,12 +137,23 @@ const screenController = (function () {
         cellButton.classList.add("cell");
         cellButton.dataset.row = rowIndex;
         cellButton.dataset.column = colIndex;
-        cellButton.textContent = "x";
-        console.log(cell);
+        cellButton.textContent = cell;
 
         boardDiv.appendChild(cellButton);
       });
     });
+
+    function clickHandlerBoard(e) {
+      const activePlayer = game.getActivePlayer();
+
+      e.target.textContent = activePlayer.token;
+    }
+    boardDiv.addEventListener("click", clickHandlerBoard);
   };
-  updateScreen();
+
+  return {
+    updateScreen,
+  };
 })();
+
+screenController.updateScreen();
