@@ -117,7 +117,7 @@ function GameController(maxRounds) {
   };
 }
 
-function ScreenController() {
+const screenController = (function () {
   const game = GameController(5);
   const playerTurnDiv = document.querySelector(".turn");
   const boardDiv = document.querySelector(".board");
@@ -129,5 +129,20 @@ function ScreenController() {
     const activePlayer = game.getActivePlayer();
 
     playerTurnDiv.textContent = `${activePlayer.name} turn..`;
+
+    board.forEach((row, rowIndex) => {
+      row.forEach((cell, colIndex) => {
+        const cellButton = document.createElement("button");
+
+        cellButton.classList.add("cell");
+        cellButton.dataset.row = rowIndex;
+        cellButton.dataset.column = colIndex;
+        cellButton.textContent = "x";
+        console.log(cell);
+
+        boardDiv.appendChild(cellButton);
+      });
+    });
   };
-}
+  updateScreen();
+})();
