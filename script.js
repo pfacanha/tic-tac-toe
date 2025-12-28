@@ -73,8 +73,6 @@ const gameController = (function (maxRounds) {
   const getActivePlayer = () => activePlayer;
 
   const printRound = () => {
-    board.printBoard();
-
     if (getActivePlayer().attempts == 0) {
       console.log(`This is ${getActivePlayer().name}'s first turn.`);
     } else {
@@ -112,11 +110,11 @@ const gameController = (function (maxRounds) {
 
   return {
     printRound,
+    playRound,
     switchPlayerTurn,
     getActivePlayer,
-    playRound,
     getBoard: board.getBoard,
   };
 })(5);
 
-gameController.getBoard();
+gameController.playRound(1, 1);
