@@ -82,7 +82,7 @@ function GameController(maxRounds) {
 
   const playRound = (row, column) => {
     if (board.isAvailable(row, column)) {
-      board.placeMark(row, column, getActivePlayer().token);
+      board.placeMark(row, column, activePlayer.token);
 
       console.log(
         `Row ${row} and Column ${column} was marked with ${
@@ -96,14 +96,10 @@ function GameController(maxRounds) {
           maxRounds - getActivePlayer().attempts
         } attempts left`
       );
-    } else {
-      console.log(
-        `${getActivePlayer().name} tried to mark at space not available!`
-      );
-    }
 
-    switchPlayerTurn();
-    printRound();
+      switchPlayerTurn();
+      printRound();
+    }
   };
 
   printRound();
@@ -145,12 +141,19 @@ const screenController = (function () {
 
     function clickHandlerBoard(e) {
       const activePlayer = game.getActivePlayer();
+      const cell = e.target;
+      const row = cell.dataset.row;
+      const column = cell.dataset.column;
 
-      e.target.textContent = activePlayer.token;
+      if (cell.textContent === "") {
+        game.playRound(row, column);
+        e.target.textContent = activePlayer.token;
+      } else {
+        console.log("Space not available!");
+      }
     }
+
     boardDiv.addEventListener("click", clickHandlerBoard);
   };
-
   updateScreen();
-  game.playRound();
 })();
