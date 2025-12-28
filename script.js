@@ -73,6 +73,8 @@ const gameController = (function (maxRounds) {
   const getActivePlayer = () => activePlayer;
 
   const printRound = () => {
+    board.printBoard();
+
     if (getActivePlayer().attempts == 0) {
       console.log(`This is ${getActivePlayer().name}'s first turn.`);
     } else {
@@ -83,6 +85,7 @@ const gameController = (function (maxRounds) {
   const playRound = (row, column) => {
     if (board.isAvailable(row, column)) {
       board.placeMark(row, column, getActivePlayer().token);
+
       console.log(
         `Row ${row} and Column ${column} was marked with ${
           getActivePlayer().token
@@ -105,7 +108,7 @@ const gameController = (function (maxRounds) {
     printRound();
   };
 
-  playRound();
+  printRound();
 
   return {
     printRound,
@@ -114,3 +117,5 @@ const gameController = (function (maxRounds) {
     playRound,
   };
 })(5);
+
+gameController.printRound();
