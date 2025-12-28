@@ -118,3 +118,4 @@ const gameController = (function (maxRounds) {
 })(5);
 
 gameController.playRound(1, 1);
+gameController.playRound(2, 1);
