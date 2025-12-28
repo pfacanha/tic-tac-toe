@@ -115,7 +115,8 @@ const gameController = (function (maxRounds) {
     switchPlayerTurn,
     getActivePlayer,
     playRound,
+    getBoard: board.getBoard,
   };
 })(5);
 
-gameController.printRound();
+gameController.getBoard();
