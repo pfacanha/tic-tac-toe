@@ -151,9 +151,6 @@ const screenController = (function () {
     boardDiv.addEventListener("click", clickHandlerBoard);
   };
 
-  return {
-    updateScreen,
-  };
+  updateScreen();
+  game.playRound();
 })();
-
-screenController.updateScreen();
