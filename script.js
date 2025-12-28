@@ -1,28 +1,24 @@
 // start project "Tic-Tac-Toe" from scratch
 function Gameboard() {
-  let rows = 3;
-  let columns = 3;
+  let spots = 9;
   const board = [];
 
-  for (let i = 0; i < rows; ++i) {
-    board[i] = [];
-    for (let j = 0; j < columns; ++j) {
-      board[i][j] = Cell();
-    }
+  for (let i = 0; i < spots; ++i) {
+    board[i] = Cell();
   }
 
   const printBoard = () => console.log(board);
 
   const getBoard = () => {
-    return board.map((row) => row.map((cell) => cell.getValue()));
+    return board.map((cell) => cell.getValue());
   };
 
-  const placeMark = (row, column, token) => {
-    board[row][column].setMark(token);
+  const placeMark = (spot, token) => {
+    board[spot].setMark(token);
   };
 
-  const isAvailable = (row, column) => {
-    return board[row][column].getValue() === "";
+  const isAvailable = (spot) => {
+    return board[spot].getValue() === "";
   };
 
   return {
@@ -52,13 +48,13 @@ function GameController(maxRounds) {
       name: "Player One",
       token: "X",
       attempts: 0,
-      score: 0,
+      points: 0,
     },
     {
       name: "Player Two",
       token: "O",
       attempts: 0,
-      score: 0,
+      points: 0,
     },
   ];
 
@@ -80,15 +76,11 @@ function GameController(maxRounds) {
     }
   };
 
-  const playRound = (row, column) => {
-    if (board.isAvailable(row, column)) {
-      board.placeMark(row, column, activePlayer.token);
+  const playRound = (spot) => {
+    if (board.isAvailable(spot)) {
+      board.placeMark(spot, activePlayer.token);
 
-      console.log(
-        `Row ${row} and Column ${column} was marked with ${
-          getActivePlayer().token
-        }`
-      );
+      console.log(`Spot ${spot} was marked with ${getActivePlayer().token}`);
       getActivePlayer().attempts++;
 
       console.log(
@@ -99,11 +91,11 @@ function GameController(maxRounds) {
 
       switchPlayerTurn();
       printRound();
+    } else {
+      console.log("Space not available!");
+      return;
     }
   };
-
-  // TODO: create function that defines who is the winner, loser or draw
-  const isOver = () => {};
 
   printRound();
 
@@ -128,28 +120,27 @@ const screenController = (function () {
     let activePlayer = game.getActivePlayer();
     playerTurnDiv.textContent = `${activePlayer.name}'s turn..`;
 
-    board.forEach((row, rowIndex) => {
-      row.forEach((cell, colIndex) => {
-        const cellButton = document.createElement("button");
+    board.forEach((_, index) => {
+      const cellButton = document.createElement("button");
 
-        cellButton.classList.add("cell");
-        cellButton.dataset.row = rowIndex;
-        cellButton.dataset.column = colIndex;
-        cellButton.textContent = cell;
+      cellButton.classList.add("cell");
+      cellButton.dataset.spot = index;
 
-        boardDiv.appendChild(cellButton);
-      });
+      boardDiv.appendChild(cellButton);
     });
   };
+
   function clickHandlerBoard(e) {
     const cell = e.target;
-    const row = cell.dataset.row;
-    const column = cell.dataset.column;
+    const spot = cell.dataset.spot;
 
-    if (cell.textContent !== "") return;
+    if (cell.textContent !== "") {
+      console.log("Space not available!");
+      return;
+    }
 
     const token = game.getActivePlayer().token;
-    game.playRound(row, column);
+    game.playRound(spot);
 
     const playerName = game.getActivePlayer().name;
     cell.textContent = token;
