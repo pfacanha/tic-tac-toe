@@ -74,9 +74,9 @@ const gameController = (function (maxRounds) {
 
   const printRound = () => {
     if (getActivePlayer().attempts == 0) {
-      console.log(`This is ${getActivePlayer().name}'s turn.`);
+      console.log(`This is ${getActivePlayer().name}'s first turn.`);
     } else {
-      console.log(`Now it's another round for ${getActivePlayer().name}`);
+      console.log(`Now it's another turn for ${getActivePlayer().name}`);
     }
   };
 
@@ -88,7 +88,6 @@ const gameController = (function (maxRounds) {
           getActivePlayer().token
         }`
       );
-
       getActivePlayer().attempts++;
 
       console.log(
@@ -101,7 +100,12 @@ const gameController = (function (maxRounds) {
         `${getActivePlayer().name} tried to mark at space not available!`
       );
     }
+
+    switchPlayerTurn();
+    printRound();
   };
+
+  playRound();
 
   return {
     printRound,
@@ -110,14 +114,3 @@ const gameController = (function (maxRounds) {
     playRound,
   };
 })(5);
-
-gameController.printRound();
-gameController.playRound(0, 0);
-gameController.switchPlayerTurn();
-gameController.printRound();
-gameController.playRound(0, 0);
-gameController.printRound();
-gameController.playRound(1, 1);
-gameController.switchPlayerTurn();
-gameController.printRound();
-gameController.playRound(1, 2);
