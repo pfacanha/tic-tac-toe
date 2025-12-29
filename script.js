@@ -1,6 +1,3 @@
-// ======================
-// Cell (factory is fine)
-// ======================
 function Cell() {
   let value = "";
 
