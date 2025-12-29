@@ -117,7 +117,7 @@ function GameController() {
   };
 }
 
-const screenController = (function () {
+const screenController = (() => {
   const game = GameController();
   const playerTurnDiv = document.querySelector(".turn");
   const boardDiv = document.querySelector(".board");
@@ -140,23 +140,13 @@ const screenController = (function () {
     });
   };
 
-  function clickHandlerBoard(e) {
-    if (game.isGameOver() || game.isDrawGame()) return;
+  const clickHandlerBoard = (e) => {
+    if (game.isGameOver()) return;
+    if (!e.target.classList.contains("cell")) return;
 
-    const cell = e.target;
-    if (!cell.classList.contains("cell")) return;
-
-    game.playRound(cell.dataset.row, cell.dataset.column);
+    game.playRound(e.target.dataset.row, e.target.dataset.column);
     updateScreen();
-
-    if (game.isGameOver()) {
-      playerTurnDiv.textContent = `${game.getActivePlayer().name} wins!`;
-      setTimeout(() => location.reload(), 1500);
-    } else if (game.isDrawGame()) {
-      playerTurnDiv.textContent = "Draw Game!";
-      setTimeout(() => location.reload(), 1500);
-    }
-  }
+  };
 
   boardDiv.addEventListener("click", clickHandlerBoard);
   updateScreen();
