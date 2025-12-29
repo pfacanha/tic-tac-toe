@@ -92,13 +92,14 @@ function GameController() {
 
     board.placeMark(row, column, activePlayer.token);
     activePlayer.marks.push(position);
+
     attempts++;
 
-    if (attempts >= 5 && checkWinner(activePlayer)) {
+    if (checkWinner(activePlayer)) {
       console.log(`${activePlayer.name} wins!`);
       winnerFound = true;
       return;
-    } else if (attempts >= 5 && !checkWinner(activePlayer)) {
+    } else if (attempts == 9 && !checkWinner(activePlayer)) {
       console.log("Draw game!");
       drawGame = true;
       return;
