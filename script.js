@@ -99,7 +99,7 @@ function GameController() {
       console.log(`${activePlayer.name} wins!`);
       winnerFound = true;
       return;
-    } else if ((attempts = 9 && !checkWinner(activePlayer))) {
+    } else if (attempts == 9 && !checkWinner(activePlayer)) {
       console.log("Draw game!");
       drawGame = true;
       return;
