@@ -14,15 +14,15 @@ function Gameboard() {
   const printBoard = () => console.log(board);
 
   const getBoard = () => {
-    return board.map((cell) => cell.getValue());
+    return board.map((row) => row.map((cell) => cell.getValue()));
   };
 
-  const placeMark = (spot, token) => {
-    board[spot].setMark(token);
+  const placeMark = (row, column, token) => {
+    board[row][column].setMark(token);
   };
 
-  const isAvailable = (spot) => {
-    return board[spot].getValue() === "";
+  const isAvailable = (row, column) => {
+    return board[row][column].getValue() === "";
   };
 
   return {
@@ -51,12 +51,12 @@ function GameController(maxRounds) {
     {
       name: "Player One",
       token: "X",
-      attempts: 0,
+      marks: [],
     },
     {
       name: "Player Two",
       token: "O",
-      attempts: 0,
+      marks: [],
     },
   ];
 
@@ -78,11 +78,15 @@ function GameController(maxRounds) {
     }
   };
 
-  const playRound = (spot) => {
-    if (board.isAvailable(spot)) {
-      board.placeMark(spot, activePlayer.token);
+  const playRound = (row, column) => {
+    const position = row + column;
 
-      console.log(`Spot ${spot} was marked with ${getActivePlayer().token}`);
+    checkWinner(position);
+
+    if (board.isAvailable(row, column)) {
+      board.placeMark(row, column, activePlayer.token);
+
+      console.log(`Row ${row} was marked with ${getActivePlayer().token}`);
       getActivePlayer().attempts++;
 
       console.log(
@@ -96,6 +100,8 @@ function GameController(maxRounds) {
       console.log(board.getBoard());
     }
   };
+
+  const checkWinner = (position) => {};
 
   printRound();
 
@@ -120,19 +126,23 @@ const screenController = (function () {
     let activePlayer = game.getActivePlayer();
     playerTurnDiv.textContent = `${activePlayer.name}'s turn..`;
 
-    board.forEach((_, index) => {
-      const cellButton = document.createElement("button");
+    board.forEach((row, rowIndex) => {
+      row.forEach((column, columnIndex) => {
+        const cellButton = document.createElement("button");
 
-      cellButton.classList.add("cell");
-      cellButton.dataset.spot = index;
+        cellButton.classList.add("cell");
+        cellButton.dataset.row = rowIndex;
+        cellButton.dataset.column = columnIndex;
 
-      boardDiv.appendChild(cellButton);
+        boardDiv.appendChild(cellButton);
+      });
     });
   };
 
   function clickHandlerBoard(e) {
     const cell = e.target;
-    const spot = cell.dataset.spot;
+    const row = cell.dataset.row;
+    const column = cell.dataset.column;
 
     if (cell.textContent !== "") {
       console.log("Space not available!");
@@ -140,7 +150,7 @@ const screenController = (function () {
     }
 
     const token = game.getActivePlayer().token;
-    game.playRound(spot);
+    game.playRound(row, column);
 
     const playerName = game.getActivePlayer().name;
     cell.textContent = token;
