@@ -99,7 +99,7 @@ function GameController() {
       console.log(`${activePlayer.name} wins!`);
       winnerFound = true;
       return;
-    } else if (attempts == 9 && !checkWinner(activePlayer)) {
+    } else if ((attempts = 9 && !checkWinner(activePlayer))) {
       console.log("Draw game!");
       drawGame = true;
       return;
@@ -117,36 +117,51 @@ function GameController() {
   };
 }
 
-const screenController = (() => {
+const screenController = (function () {
   const game = GameController();
   const playerTurnDiv = document.querySelector(".turn");
   const boardDiv = document.querySelector(".board");
 
   const updateScreen = () => {
     boardDiv.textContent = "";
-    const board = game.getBoard();
 
+    const board = game.getBoard();
     playerTurnDiv.textContent = `${game.getActivePlayer().name}'s turn`;
 
     board.forEach((row, rowIndex) => {
       row.forEach((cell, columnIndex) => {
         const cellButton = document.createElement("button");
+
         cellButton.classList.add("cell");
         cellButton.dataset.row = rowIndex;
         cellButton.dataset.column = columnIndex;
         cellButton.textContent = cell;
+
         boardDiv.appendChild(cellButton);
       });
     });
   };
 
-  const clickHandlerBoard = (e) => {
-    if (game.isGameOver()) return;
-    if (!e.target.classList.contains("cell")) return;
+  function clickHandlerBoard(e) {
+    if (game.isGameOver() || game.isDrawGame()) return;
 
-    game.playRound(e.target.dataset.row, e.target.dataset.column);
+    const cell = e.target;
+    if (!cell.classList.contains("cell")) return;
+
+    game.playRound(cell.dataset.row, cell.dataset.column);
     updateScreen();
-  };
+
+    if (game.isGameOver()) {
+      playerTurnDiv.textContent = `${game.getActivePlayer().name} wins!`;
+      setTimeout(() => location.reload(), 1500);
+      return;
+    }
+
+    if (game.isDrawGame()) {
+      playerTurnDiv.textContent = "Draw Game!";
+      setTimeout(() => location.reload(), 1500);
+    }
+  }
 
   boardDiv.addEventListener("click", clickHandlerBoard);
   updateScreen();
