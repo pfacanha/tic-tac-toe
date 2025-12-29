@@ -1,10 +1,14 @@
 // start project "Tic-Tac-Toe" from scratch
 function Gameboard() {
-  let spots = 9;
+  let rows = 3;
+  let columns = 3;
   const board = [];
 
-  for (let i = 0; i < spots; ++i) {
-    board[i] = Cell();
+  for (let i = 0; i < rows; ++i) {
+    board[i] = [];
+    for (let j = 0; j < columns; ++j) {
+      board[i][j] = Cell();
+    }
   }
 
   const printBoard = () => console.log(board);
@@ -48,13 +52,11 @@ function GameController(maxRounds) {
       name: "Player One",
       token: "X",
       attempts: 0,
-      points: 0,
     },
     {
       name: "Player Two",
       token: "O",
       attempts: 0,
-      points: 0,
     },
   ];
 
@@ -91,9 +93,7 @@ function GameController(maxRounds) {
 
       switchPlayerTurn();
       printRound();
-    } else {
-      console.log("Space not available!");
-      return;
+      console.log(board.getBoard());
     }
   };
 
@@ -148,6 +148,5 @@ const screenController = (function () {
   }
 
   boardDiv.addEventListener("click", clickHandlerBoard);
-
   updateScreen();
 })();
