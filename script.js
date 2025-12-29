@@ -12,7 +12,7 @@ function Cell() {
   };
 }
 
-const gameboard = (() => {
+function Gameboard() {
   let rows = 3;
   let columns = 3;
   const board = [];
@@ -44,9 +44,9 @@ const gameboard = (() => {
     placeMark,
     isAvailable,
   };
-})();
+}
 
-const gameController = (() => {
+function GameController() {
   const allPossibilities = [
     ["00", "01", "02"],
     ["10", "11", "12"],
@@ -63,6 +63,7 @@ const gameController = (() => {
     { name: "Player Two", token: "O", marks: [] },
   ];
 
+  const board = Gameboard();
   let activePlayer = players[0];
   let attempts = 0;
   let winnerFound = false;
@@ -114,9 +115,10 @@ const gameController = (() => {
     isGameOver,
     isDrawGame,
   };
-})();
+}
 
-const screenController = (() => {
+const screenController = (function () {
+  const game = GameController();
   const playerTurnDiv = document.querySelector(".turn");
   const boardDiv = document.querySelector(".board");
 
