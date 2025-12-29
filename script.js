@@ -66,7 +66,8 @@ function GameController() {
   const board = Gameboard();
   let activePlayer = players[0];
   let attempts = 0;
-  let gameOver = false;
+  let winnerFound = false;
+  let drawGame = false;
 
   const switchPlayerTurn = () => {
     activePlayer = activePlayer === players[0] ? players[1] : players[0];
@@ -74,7 +75,8 @@ function GameController() {
 
   const getActivePlayer = () => activePlayer;
 
-  const isGameOver = () => gameOver;
+  const isGameOver = () => winnerFound;
+  const isDrawGame = () => drawGame;
 
   const checkWinner = (player) =>
     allPossibilities.some((combo) =>
@@ -82,7 +84,7 @@ function GameController() {
     );
 
   const playRound = (row, column) => {
-    if (gameOver) return;
+    if (winnerFound || drawGame) return;
 
     const position = `${row}${column}`;
 
@@ -94,7 +96,11 @@ function GameController() {
 
     if (attempts >= 5 && checkWinner(activePlayer)) {
       console.log(`${activePlayer.name} wins!`);
-      gameOver = true;
+      winnerFound = true;
+      return;
+    } else if (attempts >= 5 && !checkWinner(activePlayer)) {
+      console.log("Draw game!");
+      drawGame = true;
       return;
     }
 
@@ -106,6 +112,7 @@ function GameController() {
     getActivePlayer,
     getBoard: board.getBoard,
     isGameOver,
+    isDrawGame,
   };
 }
 
@@ -133,7 +140,7 @@ const screenController = (function () {
   };
 
   function clickHandlerBoard(e) {
-    if (game.isGameOver()) return;
+    if (game.isGameOver() || game.isDrawGame()) return;
 
     const cell = e.target;
     if (!cell.classList.contains("cell")) return;
@@ -142,7 +149,10 @@ const screenController = (function () {
     updateScreen();
 
     if (game.isGameOver()) {
-      playerTurnDiv.textContent = "Game Over!";
+      playerTurnDiv.textContent = `${game.getActivePlayer().name} wins!`;
+      setTimeout(() => location.reload(), 1500);
+    } else if (game.isDrawGame()) {
+      playerTurnDiv.textContent = "Draw Game!";
       setTimeout(() => location.reload(), 1500);
     }
   }
