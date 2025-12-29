@@ -27,11 +27,7 @@ const gameboard = (function () {
 
   const isAvailable = (row, column) => board[row][column].getValue() === "";
 
-  return {
-    getBoard,
-    placeMark,
-    isAvailable,
-  };
+  return { getBoard, placeMark, isAvailable };
 })();
 
 const gameController = (function () {
@@ -65,8 +61,8 @@ const gameController = (function () {
   const isDrawGame = () => drawGame;
 
   const checkWinner = (player) =>
-    allPossibilities.some((combo) =>
-      combo.every((mark) => player.marks.includes(mark))
+    allPossibilities.some(
+      (combo) => combo.every((mark) => player.marks.includes(mark)) // for every cell number if player marks "has" it
     );
 
   const playRound = (row, column) => {
