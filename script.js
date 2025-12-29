@@ -1,4 +1,17 @@
 // start project "Tic-Tac-Toe" from scratch
+function Cell() {
+  let value = "";
+
+  const setMark = (token) => (value = token);
+
+  const getValue = () => value;
+
+  return {
+    setMark,
+    getValue,
+  };
+}
+
 function Gameboard() {
   let rows = 3;
   let columns = 3;
@@ -33,20 +46,19 @@ function Gameboard() {
   };
 }
 
-function Cell() {
-  let value = "";
+function GameController() {
+  let attempts = 0;
+  const allPossibilities = [
+    ["00", "01", "02"],
+    ["10", "11", "12"],
+    ["20", "21", "22"],
+    ["00", "10", "20"],
+    ["01", "11", "21"],
+    ["02", "12", "22"],
+    ["00", "11", "22"],
+    ["20", "11", "02"],
+  ];
 
-  const setMark = (token) => (value = token);
-
-  const getValue = () => value;
-
-  return {
-    setMark,
-    getValue,
-  };
-}
-
-function GameController(maxRounds) {
   const players = [
     {
       name: "Player One",
@@ -71,37 +83,40 @@ function GameController(maxRounds) {
   const getActivePlayer = () => activePlayer;
 
   const printRound = () => {
-    if (getActivePlayer().attempts == 0) {
-      console.log(`This is ${getActivePlayer().name}'s first turn.`);
-    } else {
-      console.log(`Now it's another turn for ${getActivePlayer().name}`);
-    }
+    console.log(`${activePlayer.name}'s turn`);
   };
 
   const playRound = (row, column) => {
     const position = row + column;
 
-    checkWinner(position);
-
     if (board.isAvailable(row, column)) {
       board.placeMark(row, column, activePlayer.token);
-
-      console.log(`Row ${row} was marked with ${getActivePlayer().token}`);
-      getActivePlayer().attempts++;
+      activePlayer.marks.push(row + column);
 
       console.log(
-        `${getActivePlayer().name} has ${
-          maxRounds - getActivePlayer().attempts
-        } attempts left`
+        `Row ${row} and Column ${column} was marked with ${
+          getActivePlayer().token
+        }`
       );
-
+      ++attempts;
+      if (attempts >= 3) {
+        checkWinner(activePlayer);
+      }
       switchPlayerTurn();
       printRound();
-      console.log(board.getBoard());
     }
   };
 
-  const checkWinner = (position) => {};
+  const checkWinner = (player) => {
+    // check if active player marks array contains at least 3 of one of the possibilities
+    const matches = allPossibilities.filter((possibility) => {
+      player.marks.includes(possibility);
+    });
+    if (matches.length == 3) {
+      console.log("We got a winner!" + player.name);
+      return true;
+    }
+  };
 
   printRound();
 
