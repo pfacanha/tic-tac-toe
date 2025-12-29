@@ -1,52 +1,49 @@
-// start project "Tic-Tac-Toe" from scratch
+// ======================
+// Cell (factory is fine)
+// ======================
 function Cell() {
   let value = "";
 
   const setMark = (token) => (value = token);
-
   const getValue = () => value;
 
-  return {
-    setMark,
-    getValue,
-  };
+  return { setMark, getValue };
 }
 
-function Gameboard() {
-  let rows = 3;
-  let columns = 3;
+// ======================
+// Gameboard (IIFE)
+// ======================
+const Gameboard = (function () {
+  const rows = 3;
+  const columns = 3;
   const board = [];
 
-  for (let i = 0; i < rows; ++i) {
+  for (let i = 0; i < rows; i++) {
     board[i] = [];
-    for (let j = 0; j < columns; ++j) {
+    for (let j = 0; j < columns; j++) {
       board[i][j] = Cell();
     }
   }
 
-  const printBoard = () => console.log(board);
-
-  const getBoard = () => {
-    return board.map((row) => row.map((cell) => cell.getValue()));
-  };
+  const getBoard = () => board.map((row) => row.map((cell) => cell.getValue()));
 
   const placeMark = (row, column, token) => {
     board[row][column].setMark(token);
   };
 
-  const isAvailable = (row, column) => {
-    return board[row][column].getValue() === "";
-  };
+  const isAvailable = (row, column) => board[row][column].getValue() === "";
 
   return {
-    printBoard,
     getBoard,
     placeMark,
     isAvailable,
   };
-}
+})();
 
-function GameController() {
+// ======================
+// GameController (IIFE)
+// ======================
+const GameController = (function () {
   const allPossibilities = [
     ["00", "01", "02"],
     ["10", "11", "12"],
@@ -63,7 +60,6 @@ function GameController() {
     { name: "Player Two", token: "O", marks: [] },
   ];
 
-  const board = Gameboard();
   let activePlayer = players[0];
   let attempts = 0;
   let winnerFound = false;
@@ -74,7 +70,6 @@ function GameController() {
   };
 
   const getActivePlayer = () => activePlayer;
-
   const isGameOver = () => winnerFound;
   const isDrawGame = () => drawGame;
 
@@ -85,22 +80,20 @@ function GameController() {
 
   const playRound = (row, column) => {
     if (winnerFound || drawGame) return;
+    if (!Gameboard.isAvailable(row, column)) return;
 
     const position = `${row}${column}`;
 
-    if (!board.isAvailable(row, column)) return;
-
-    board.placeMark(row, column, activePlayer.token);
+    Gameboard.placeMark(row, column, activePlayer.token);
     activePlayer.marks.push(position);
-
     attempts++;
 
     if (checkWinner(activePlayer)) {
-      console.log(`${activePlayer.name} wins!`);
       winnerFound = true;
       return;
-    } else if (attempts == 9 && !checkWinner(activePlayer)) {
-      console.log("Draw game!");
+    }
+
+    if (attempts === 9) {
       drawGame = true;
       return;
     }
@@ -111,14 +104,18 @@ function GameController() {
   return {
     playRound,
     getActivePlayer,
-    getBoard: board.getBoard,
+    getBoard: Gameboard.getBoard,
     isGameOver,
     isDrawGame,
   };
-}
+})();
 
+// ======================
+// ScreenController (IIFE)
+// ======================
 const screenController = (function () {
-  const game = GameController();
+  const game = GameController;
+
   const playerTurnDiv = document.querySelector(".turn");
   const boardDiv = document.querySelector(".board");
 
@@ -142,7 +139,7 @@ const screenController = (function () {
     });
   };
 
-  function clickHandlerBoard(e) {
+  const clickHandlerBoard = (e) => {
     if (game.isGameOver() || game.isDrawGame()) return;
 
     const cell = e.target;
@@ -161,7 +158,7 @@ const screenController = (function () {
       playerTurnDiv.textContent = "Draw Game!";
       setTimeout(() => location.reload(), 1500);
     }
-  }
+  };
 
   boardDiv.addEventListener("click", clickHandlerBoard);
   updateScreen();
