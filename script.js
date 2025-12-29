@@ -63,7 +63,6 @@ const gameController = (() => {
     { name: "Player Two", token: "O", marks: [] },
   ];
 
-  const board = Gameboard();
   let activePlayer = players[0];
   let attempts = 0;
   let winnerFound = false;
@@ -118,7 +117,6 @@ const gameController = (() => {
 })();
 
 const screenController = (() => {
-  const game = GameController();
   const playerTurnDiv = document.querySelector(".turn");
   const boardDiv = document.querySelector(".board");
 
