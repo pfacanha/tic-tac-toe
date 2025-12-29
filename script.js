@@ -47,7 +47,6 @@ function Gameboard() {
 }
 
 function GameController() {
-  let attempts = 0;
   const allPossibilities = [
     ["00", "01", "02"],
     ["10", "11", "12"],
@@ -60,21 +59,14 @@ function GameController() {
   ];
 
   const players = [
-    {
-      name: "Player One",
-      token: "X",
-      marks: [],
-    },
-    {
-      name: "Player Two",
-      token: "O",
-      marks: [],
-    },
+    { name: "Player One", token: "X", marks: [] },
+    { name: "Player Two", token: "O", marks: [] },
   ];
 
   const board = Gameboard();
-
   let activePlayer = players[0];
+  let attempts = 0;
+  let gameOver = false;
 
   const switchPlayerTurn = () => {
     activePlayer = activePlayer === players[0] ? players[1] : players[0];
@@ -82,94 +74,77 @@ function GameController() {
 
   const getActivePlayer = () => activePlayer;
 
-  const printRound = () => {
-    console.log(`${activePlayer.name}'s turn`);
-  };
+  const isGameOver = () => gameOver;
+
+  const checkWinner = (player) =>
+    allPossibilities.some((combo) =>
+      combo.every((mark) => player.marks.includes(mark))
+    );
 
   const playRound = (row, column) => {
-    const position = row + column;
+    if (gameOver) return;
 
-    if (board.isAvailable(row, column)) {
-      board.placeMark(row, column, activePlayer.token);
-      activePlayer.marks.push(row + column);
+    const position = `${row}${column}`;
 
-      console.log(
-        `Row ${row} and Column ${column} was marked with ${
-          getActivePlayer().token
-        }`
-      );
-      ++attempts;
-      if (attempts >= 3) {
-        checkWinner(activePlayer);
-      }
-      switchPlayerTurn();
-      printRound();
+    if (!board.isAvailable(row, column)) return;
+
+    board.placeMark(row, column, activePlayer.token);
+    activePlayer.marks.push(position);
+    attempts++;
+
+    if (attempts >= 5 && checkWinner(activePlayer)) {
+      console.log(`${activePlayer.name} wins!`);
+      gameOver = true;
+      return;
     }
-  };
 
-  const checkWinner = (player) => {
-    // check if active player marks array contains at least 3 of one of the possibilities
-    const matches = allPossibilities.filter((possibility) => {
-      player.marks.includes(possibility);
-    });
-    if (matches.length == 3) {
-      console.log("We got a winner!" + player.name);
-      return true;
-    }
+    switchPlayerTurn();
   };
-
-  printRound();
 
   return {
-    printRound,
     playRound,
-    switchPlayerTurn,
     getActivePlayer,
     getBoard: board.getBoard,
+    isGameOver,
   };
 }
 
 const screenController = (function () {
-  const game = GameController(5);
+  const game = GameController();
   const playerTurnDiv = document.querySelector(".turn");
   const boardDiv = document.querySelector(".board");
 
   const updateScreen = () => {
     boardDiv.textContent = "";
-
     const board = game.getBoard();
-    let activePlayer = game.getActivePlayer();
-    playerTurnDiv.textContent = `${activePlayer.name}'s turn..`;
+
+    playerTurnDiv.textContent = `${game.getActivePlayer().name}'s turn`;
 
     board.forEach((row, rowIndex) => {
-      row.forEach((column, columnIndex) => {
+      row.forEach((cell, columnIndex) => {
         const cellButton = document.createElement("button");
-
         cellButton.classList.add("cell");
         cellButton.dataset.row = rowIndex;
         cellButton.dataset.column = columnIndex;
-
+        cellButton.textContent = cell;
         boardDiv.appendChild(cellButton);
       });
     });
   };
 
   function clickHandlerBoard(e) {
+    if (game.isGameOver()) return;
+
     const cell = e.target;
-    const row = cell.dataset.row;
-    const column = cell.dataset.column;
+    if (!cell.classList.contains("cell")) return;
 
-    if (cell.textContent !== "") {
-      console.log("Space not available!");
-      return;
+    game.playRound(cell.dataset.row, cell.dataset.column);
+    updateScreen();
+
+    if (game.isGameOver()) {
+      playerTurnDiv.textContent = "Game Over!";
+      setTimeout(() => location.reload(), 1500);
     }
-
-    const token = game.getActivePlayer().token;
-    game.playRound(row, column);
-
-    const playerName = game.getActivePlayer().name;
-    cell.textContent = token;
-    playerTurnDiv.textContent = `${playerName}'s turn..`;
   }
 
   boardDiv.addEventListener("click", clickHandlerBoard);
