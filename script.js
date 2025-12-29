@@ -10,10 +10,7 @@ function Cell() {
   return { setMark, getValue };
 }
 
-// ======================
-// Gameboard (IIFE)
-// ======================
-const Gameboard = (function () {
+const gameboard = (function () {
   const rows = 3;
   const columns = 3;
   const board = [];
@@ -40,10 +37,7 @@ const Gameboard = (function () {
   };
 })();
 
-// ======================
-// GameController (IIFE)
-// ======================
-const GameController = (function () {
+const gameController = (function () {
   const allPossibilities = [
     ["00", "01", "02"],
     ["10", "11", "12"],
@@ -80,11 +74,11 @@ const GameController = (function () {
 
   const playRound = (row, column) => {
     if (winnerFound || drawGame) return;
-    if (!Gameboard.isAvailable(row, column)) return;
+    if (!gameboard.isAvailable(row, column)) return;
 
     const position = `${row}${column}`;
 
-    Gameboard.placeMark(row, column, activePlayer.token);
+    gameboard.placeMark(row, column, activePlayer.token);
     activePlayer.marks.push(position);
     attempts++;
 
@@ -104,17 +98,14 @@ const GameController = (function () {
   return {
     playRound,
     getActivePlayer,
-    getBoard: Gameboard.getBoard,
+    getBoard: gameboard.getBoard,
     isGameOver,
     isDrawGame,
   };
 })();
 
-// ======================
-// ScreenController (IIFE)
-// ======================
 const screenController = (function () {
-  const game = GameController;
+  const game = gameController;
 
   const playerTurnDiv = document.querySelector(".turn");
   const boardDiv = document.querySelector(".board");
