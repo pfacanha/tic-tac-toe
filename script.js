@@ -12,7 +12,7 @@ function Cell() {
   };
 }
 
-function Gameboard() {
+const gameboard = (() => {
   let rows = 3;
   let columns = 3;
   const board = [];
@@ -44,9 +44,9 @@ function Gameboard() {
     placeMark,
     isAvailable,
   };
-}
+})();
 
-function GameController() {
+const gameController = (() => {
   const allPossibilities = [
     ["00", "01", "02"],
     ["10", "11", "12"],
@@ -115,9 +115,9 @@ function GameController() {
     isGameOver,
     isDrawGame,
   };
-}
+})();
 
-const screenController = (function () {
+const screenController = (() => {
   const game = GameController();
   const playerTurnDiv = document.querySelector(".turn");
   const boardDiv = document.querySelector(".board");
