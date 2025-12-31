@@ -62,7 +62,7 @@ const gameController = (function () {
 
   const checkWinner = (player) =>
     allPossibilities.some(
-      (combo) => combo.every((mark) => player.marks.includes(mark)) // for every cell number if player marks "has" it
+      (combo) => combo.every((mark) => player.marks.includes(mark)) // for every cell combination if player marks array contains all of the options
     );
 
   const playRound = (row, column) => {
